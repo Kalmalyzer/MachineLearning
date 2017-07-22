@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SpaceInvaders.Simulation;
 
 namespace SpaceInvaders.Interactive
 {
@@ -10,6 +6,12 @@ namespace SpaceInvaders.Interactive
     {
         static void Main(string[] args)
         {
+            int width = 40;
+            int height = 20;
+
+            WorldState worldState = Simulate.CreateNewWorldState(width, height);
+
+            Display.PrintWorld(worldState);
         }
     }
 }
