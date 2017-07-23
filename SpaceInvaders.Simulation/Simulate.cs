@@ -27,7 +27,7 @@ namespace SpaceInvaders.Simulation
                 case PlayerInput.MoveLeft:
                     return new PlayerState(Math.Max(playerState.Position - 1, 0));
                 case PlayerInput.MoveRight:
-                    return new PlayerState(Math.Max(playerState.Position + 1, worldState.Width - 1));
+                    return new PlayerState(Math.Min(playerState.Position + 1, worldState.Width - 1));
                 default:
                     return playerState;
             }

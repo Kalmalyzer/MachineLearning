@@ -1,9 +1,12 @@
 ﻿using SpaceInvaders.Simulation;
+using System;
+using System.Threading;
 
 namespace SpaceInvaders.Interactive
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             int width = 40;
@@ -11,7 +14,13 @@ namespace SpaceInvaders.Interactive
 
             WorldState worldState = Simulate.CreateNewWorldState(width, height);
 
-            Display.PrintWorld(worldState);
+            while (true)
+            {
+                Simulate.PlayerInput playerInput = KeyboardInput.ReadPlayerInput();
+                Display.PrintWorld(worldState);
+                worldState = Simulate.Tick(worldState, playerInput);
+                Thread.Sleep(250);
+            }
         }
     }
 }
