@@ -108,6 +108,53 @@ namespace SpaceInvaders.Simulation
             return new RocketsState(newPositions);
         }
 
+        private static List<Tuple<int, int>> FindAlienRocketCollisions(AliensState aliensState, RocketsState rocketsState)
+        {
+            List<Vector2i> alienPositions = aliensState.GetPresentAliens();
+
+            List<Tuple<int, int>> collisions = new List<Tuple<int, int>>();
+
+            for (int rocketIndex = 0; rocketIndex < rocketsState.Positions.Count; rocketIndex++)
+            {
+                Vector2i rocketPosition = rocketsState.Positions[rocketIndex];
+                int alienIndex = alienPositions.FindIndex(alienPosition => alienPosition == rocketPosition);
+                if (alienIndex != -1)
+                    collisions.Add(new Tuple<int, int>(alienIndex, rocketIndex));
+            }
+
+            return collisions;
+        }
+
+        private static AliensState ResolveAlienCollisions(AliensState aliensState, List<Tuple<int, int>> alienRocketCollisions)
+        {
+            List<Vector2i> alienPositions = aliensState.GetPresentAliens();
+
+            if (alienRocketCollisions.Count != 0)
+            {
+                bool[,] newPresent = (bool[,])aliensState.Present.Clone();
+                foreach (Tuple<int, int> collision in alienRocketCollisions)
+                {
+                    Vector2i collisionPosition = alienPositions[collision.Item1];
+                    newPresent[collisionPosition.X - aliensState.TopLeft.X, collisionPosition.Y - aliensState.TopLeft.Y] = false;
+                }
+
+                return new AliensState(aliensState.TopLeft, newPresent);
+            }
+            else
+                return aliensState;
+        }
+
+        private static RocketsState ResolveRocketCollisions(RocketsState rocketsState, List<Tuple<int, int>> alienRocketCollisions)
+        {
+            if (alienRocketCollisions.Count != 0)
+            {
+                List<Vector2i> remainingPositions = rocketsState.Positions.Where((position, index) => !alienRocketCollisions.Exists(collision => index == collision.Item2)).ToList();
+                return new RocketsState(remainingPositions);
+            }
+            else
+                return rocketsState;
+        }
+
         public static WorldState Tick(WorldState worldState, PlayerInput playerInput)
         {
             PlayerState newPlayerState = TickPlayer(worldState, worldState.PlayerState, playerInput);
@@ -118,7 +165,12 @@ namespace SpaceInvaders.Simulation
 
             RocketsState newRocketsState = TickRockets(worldState, worldState.RocketsState, worldState.PlayerState, playerInput);
 
-            return new WorldState(worldState.Width, worldState.Height, worldState.MaxRockets, newPlayerState, newAliensState, newAliensMovementState, newRocketsState);
+            List<Tuple<int, int>> alienRocketCollisions = FindAlienRocketCollisions(newAliensState, newRocketsState);
+
+            AliensState newAliensState2 = ResolveAlienCollisions(newAliensState, alienRocketCollisions);
+            RocketsState newRocketsState2 = ResolveRocketCollisions(newRocketsState, alienRocketCollisions);
+
+            return new WorldState(worldState.Width, worldState.Height, worldState.MaxRockets, newPlayerState, newAliensState2, newAliensMovementState, newRocketsState2);
         }
     }
 }
