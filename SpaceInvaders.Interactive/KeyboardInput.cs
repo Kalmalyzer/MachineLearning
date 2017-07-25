@@ -11,6 +11,8 @@ namespace SpaceInvaders.Interactive
                 return Simulate.PlayerInput.MoveLeft;
             if ((Keyboard.GetKeyStates(Key.Right) & KeyStates.Down) != 0)
                 return Simulate.PlayerInput.MoveRight;
+            if ((Keyboard.GetKeyStates(Key.Space) & KeyStates.Down) != 0)
+                return Simulate.PlayerInput.Fire;
 
             return Simulate.PlayerInput.None;
         }

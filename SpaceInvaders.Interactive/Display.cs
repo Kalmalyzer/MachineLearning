@@ -27,12 +27,19 @@ namespace SpaceInvaders.Interactive
                 view[alienPosition.X, alienPosition.Y] = 'A';
         }
 
+        private static void DrawRockets(RocketsState rocketsState, char[,] view)
+        {
+            foreach (Vector2i rocketPosition in rocketsState.Positions)
+                view[rocketPosition.X, rocketPosition.Y] = 'R';
+        }
+
         private static char[,] GenerateView(WorldState worldState)
         {
             char[,] view = new char[worldState.Width, worldState.Height];
 
             ClearView(view);
             DrawPlayer(worldState, worldState.PlayerState, view);
+            DrawRockets(worldState.RocketsState, view);
             DrawAliens(worldState, worldState.AliensState, view);
 
             return view;

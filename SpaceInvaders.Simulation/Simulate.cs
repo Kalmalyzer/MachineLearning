@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SpaceInvaders.Simulation
@@ -20,12 +21,13 @@ namespace SpaceInvaders.Simulation
             return aliensState;
         }
 
-        public static WorldState CreateNewWorldState(int width, int height, int aliensWidth, int aliensHeight)
+        public static WorldState CreateNewWorldState(int width, int height, int maxRockets, int aliensWidth, int aliensHeight)
         {
             PlayerState playerState = new PlayerState(width / 2);
             AliensState aliensState = CreateNewAliensState(width, height, aliensWidth, aliensHeight);
             AliensMovementState aliensMovementState = new AliensMovementState(AliensMovementState.MovementDirection.Right);
-            WorldState worldState = new WorldState(width, height, playerState, aliensState, aliensMovementState);
+            RocketsState rocketsState = new RocketsState(new List<Vector2i>());
+            WorldState worldState = new WorldState(width, height, maxRockets, playerState, aliensState, aliensMovementState, rocketsState);
             return worldState;
         }
 
@@ -34,6 +36,7 @@ namespace SpaceInvaders.Simulation
             None,
             MoveLeft,
             MoveRight,
+            Fire,
         }
 
         public static PlayerState TickPlayer(WorldState worldState, PlayerState playerState, PlayerInput playerInput)
@@ -97,14 +100,25 @@ namespace SpaceInvaders.Simulation
             }
         }
 
+        public static RocketsState TickRockets(WorldState worldState, RocketsState rocketsState, PlayerState playerState, PlayerInput playerInput)
+        {
+            List<Vector2i> newPositions = rocketsState.Positions.Select(position => position + new Vector2i(0, -1)).Where(position => position.Y >= 0).ToList();
+            if (playerInput == PlayerInput.Fire && newPositions.Count < worldState.MaxRockets)
+                newPositions.Add(new Vector2i(playerState.Position, worldState.Height - 1));
+            return new RocketsState(newPositions);
+        }
+
         public static WorldState Tick(WorldState worldState, PlayerInput playerInput)
         {
             PlayerState newPlayerState = TickPlayer(worldState, worldState.PlayerState, playerInput);
+
             AliensState newAliensState;
             AliensMovementState newAliensMovementState;
             TickAliens(worldState, worldState.AliensState, worldState.AliensMovementState, out newAliensState, out newAliensMovementState);
 
-            return new WorldState(worldState.Width, worldState.Height, newPlayerState, newAliensState, newAliensMovementState);
+            RocketsState newRocketsState = TickRockets(worldState, worldState.RocketsState, worldState.PlayerState, playerInput);
+
+            return new WorldState(worldState.Width, worldState.Height, worldState.MaxRockets, newPlayerState, newAliensState, newAliensMovementState, newRocketsState);
         }
     }
 }
