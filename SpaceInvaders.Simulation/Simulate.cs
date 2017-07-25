@@ -54,32 +54,7 @@ namespace SpaceInvaders.Simulation
         {
             Vector2i topLeft, bottomRight;
             aliensState.GetAbsoluteBoundingBox(out topLeft, out bottomRight);
-
-            AliensMovementState.MovementDirection nextMovementDirection;
-
-            switch (aliensMovementState.PreviousMovementDirection)
-            {
-                case AliensMovementState.MovementDirection.Left:
-                    if (topLeft.X == 0)
-                        nextMovementDirection = AliensMovementState.MovementDirection.Down;
-                    else
-                        nextMovementDirection = aliensMovementState.PreviousMovementDirection;
-                    break;
-                case AliensMovementState.MovementDirection.Right:
-                    if (bottomRight.X == worldState.Width)
-                        nextMovementDirection = AliensMovementState.MovementDirection.Down;
-                    else
-                        nextMovementDirection = aliensMovementState.PreviousMovementDirection;
-                    break;
-                case AliensMovementState.MovementDirection.Down:
-                    if (topLeft.X == 0)
-                        nextMovementDirection = AliensMovementState.MovementDirection.Right;
-                    else
-                        nextMovementDirection = AliensMovementState.MovementDirection.Left;
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+            AliensMovementState.MovementDirection nextMovementDirection = ChooseNewAliensMovementDirection(worldState, aliensMovementState, topLeft, bottomRight);
 
             Dictionary<AliensMovementState.MovementDirection, Vector2i> movementDirectionToDelta =
                 new Dictionary<AliensMovementState.MovementDirection, Vector2i>
@@ -93,6 +68,33 @@ namespace SpaceInvaders.Simulation
 
             newAliensState = new AliensState(aliensState.TopLeft + movementDelta, aliensState.Present);
             newAliensMovementState = new AliensMovementState(nextMovementDirection);
+        }
+
+        private static AliensMovementState.MovementDirection ChooseNewAliensMovementDirection(WorldState worldState, AliensMovementState aliensMovementState, Vector2i topLeft, Vector2i bottomRight)
+        {
+            switch (aliensMovementState.PreviousMovementDirection)
+            {
+                case AliensMovementState.MovementDirection.Left:
+                    if (topLeft.X == 0)
+                        return AliensMovementState.MovementDirection.Down;
+                    else
+                        return aliensMovementState.PreviousMovementDirection;
+
+                case AliensMovementState.MovementDirection.Right:
+                    if (bottomRight.X == worldState.Width)
+                        return AliensMovementState.MovementDirection.Down;
+                    else
+                        return aliensMovementState.PreviousMovementDirection;
+
+                case AliensMovementState.MovementDirection.Down:
+                    if (topLeft.X == 0)
+                        return AliensMovementState.MovementDirection.Right;
+                    else
+                        return AliensMovementState.MovementDirection.Left;
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public static WorldState Tick(WorldState worldState, PlayerInput playerInput)
