@@ -6,34 +6,27 @@ namespace SpaceInvaders.Simulation
     {
         public readonly Vector2i TopLeft;
 
-        public readonly bool[,] Present;
+        public readonly List<Vector2i> RelativePositions;
 
-        public AliensState(Vector2i topLeft, bool[,] present)
+        public AliensState(Vector2i topLeft, List<Vector2i> relativePositions)
         {
             TopLeft = topLeft;
-            Present = present;
+            RelativePositions = relativePositions;
         }
 
         public bool GetAbsoluteBoundingBox(out Vector2i topLeft, out Vector2i bottomRight)
         {
-            Vector2i min = new Vector2i(Present.GetLength(0), Present.GetLength(1));
-            Vector2i max = new Vector2i(-1, -1);
+            if (RelativePositions.Count != 0)
+            {
+                Vector2i min = new Vector2i(int.MaxValue, int.MaxValue);
+                Vector2i max = new Vector2i(int.MinValue, int.MinValue);
 
-            bool present = false;
-
-            for (int y = 0; y < Present.GetLength(1); y++)
-                for (int x = 0; x < Present.GetLength(0); x++)
+                foreach (Vector2i position in RelativePositions)
                 {
-                    if (Present[x, y])
-                    {
-                        min = Vector2i.Min(min, new Vector2i(x, y));
-                        max = Vector2i.Max(max, new Vector2i(x, y));
-                        present = true;
-                    }
+                    min = Vector2i.Min(min, position);
+                    max = Vector2i.Max(max, position);
                 }
 
-            if (present)
-            {
                 topLeft = min + TopLeft;
                 bottomRight = max + Vector2i.One + TopLeft;
                 return true;
@@ -44,20 +37,6 @@ namespace SpaceInvaders.Simulation
                 bottomRight = new Vector2i(-1, -1);
                 return false;
             }
-        }
-
-        public List<Vector2i> GetPresentAliens()
-        {
-            List<Vector2i> presentAliens = new List<Vector2i>();
-
-            for (int y = 0; y < Present.GetLength(1); y++)
-                for (int x = 0; x < Present.GetLength(0); x++)
-                {
-                    if (Present[x, y])
-                        presentAliens.Add(new Vector2i(x, y) + TopLeft);
-                }
-
-            return presentAliens;
         }
     }
 }

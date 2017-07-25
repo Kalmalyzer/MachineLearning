@@ -10,13 +10,13 @@ namespace SpaceInvaders.Simulation
         private static AliensState CreateNewAliensState(int width, int height, int aliensWidth, int aliensHeight)
         {
             Vector2i topLeft = new Vector2i((width - aliensWidth) / 2, 0);
-            bool[,] present = new bool[aliensWidth, aliensHeight];
+            List<Vector2i> positions = new List<Vector2i>();
 
             for (int y = 0; y < aliensHeight; y++)
                 for (int x = 0; x < aliensWidth; x++)
-                    present[x, y] = true;
+                    positions.Add(new Vector2i(x, y));
 
-            AliensState aliensState = new AliensState(topLeft, present);
+            AliensState aliensState = new AliensState(topLeft, positions);
 
             return aliensState;
         }
@@ -69,7 +69,7 @@ namespace SpaceInvaders.Simulation
 
             Vector2i movementDelta = movementDirectionToDelta[nextMovementDirection];
 
-            newAliensState = new AliensState(aliensState.TopLeft + movementDelta, aliensState.Present);
+            newAliensState = new AliensState(aliensState.TopLeft + movementDelta, aliensState.RelativePositions);
             newAliensMovementState = new AliensMovementState(nextMovementDirection);
         }
 
@@ -110,14 +110,12 @@ namespace SpaceInvaders.Simulation
 
         private static List<Tuple<int, int>> FindAlienRocketCollisions(AliensState aliensState, RocketsState rocketsState)
         {
-            List<Vector2i> alienPositions = aliensState.GetPresentAliens();
-
             List<Tuple<int, int>> collisions = new List<Tuple<int, int>>();
 
             for (int rocketIndex = 0; rocketIndex < rocketsState.Positions.Count; rocketIndex++)
             {
                 Vector2i rocketPosition = rocketsState.Positions[rocketIndex];
-                int alienIndex = alienPositions.FindIndex(alienPosition => alienPosition == rocketPosition);
+                int alienIndex = aliensState.RelativePositions.FindIndex(alienRelativePosition => (alienRelativePosition + aliensState.TopLeft) == rocketPosition);
                 if (alienIndex != -1)
                     collisions.Add(new Tuple<int, int>(alienIndex, rocketIndex));
             }
@@ -127,18 +125,10 @@ namespace SpaceInvaders.Simulation
 
         private static AliensState ResolveAlienCollisions(AliensState aliensState, List<Tuple<int, int>> alienRocketCollisions)
         {
-            List<Vector2i> alienPositions = aliensState.GetPresentAliens();
-
             if (alienRocketCollisions.Count != 0)
             {
-                bool[,] newPresent = (bool[,])aliensState.Present.Clone();
-                foreach (Tuple<int, int> collision in alienRocketCollisions)
-                {
-                    Vector2i collisionPosition = alienPositions[collision.Item1];
-                    newPresent[collisionPosition.X - aliensState.TopLeft.X, collisionPosition.Y - aliensState.TopLeft.Y] = false;
-                }
-
-                return new AliensState(aliensState.TopLeft, newPresent);
+                List<Vector2i> remainingPositions = aliensState.RelativePositions.Where((position, index) => !alienRocketCollisions.Exists(collision => index == collision.Item1)).ToList();
+                return new AliensState(aliensState.TopLeft, remainingPositions);
             }
             else
                 return aliensState;

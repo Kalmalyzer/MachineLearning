@@ -1,6 +1,7 @@
 ﻿using SpaceInvaders.Simulation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpaceInvaders.Interactive
 {
@@ -22,8 +23,8 @@ namespace SpaceInvaders.Interactive
 
         private static void DrawAliens(WorldState worldState, AliensState aliensState, char[,] view)
         {
-            List<Vector2i> alienPositions = aliensState.GetPresentAliens();
-            foreach (Vector2i alienPosition in alienPositions)
+            IEnumerable<Vector2i> positions = aliensState.RelativePositions.Select(relativePosition => relativePosition + aliensState.TopLeft);
+            foreach (Vector2i alienPosition in positions)
                 view[alienPosition.X, alienPosition.Y] = 'A';
         }
 
