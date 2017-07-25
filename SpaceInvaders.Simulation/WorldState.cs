@@ -10,13 +10,15 @@ namespace SpaceInvaders.Simulation
         public readonly int Height;
 
         public readonly PlayerState PlayerState;
+        public readonly AliensState AliensState;
 
-        public WorldState(int width, int height, PlayerState playerState)
+        public WorldState(int width, int height, PlayerState playerState, AliensState aliensState)
         {
             Width = width;
             Height = height;
 
             PlayerState = playerState;
+            AliensState = aliensState;
         }
     }
 }

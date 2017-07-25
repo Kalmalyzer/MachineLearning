@@ -12,7 +12,7 @@ namespace SpaceInvaders.Interactive
             int width = 40;
             int height = 20;
 
-            WorldState worldState = Simulate.CreateNewWorldState(width, height);
+            WorldState worldState = Simulate.CreateNewWorldState(width, height, width / 2, height / 4);
 
             while (true)
             {
