@@ -202,7 +202,18 @@ namespace SpaceInvaders.Simulation
             AliensState newAliensState;
             AliensMovementState newAliensMovementState;
             AliensFiringInput newAliensFiringInput;
-            TickAliens(worldState.GameConfigState, worldState.AliensState, worldState.AliensMovementState, out newAliensState, out newAliensMovementState, out newAliensFiringInput);
+
+            bool createNewAliens = (worldState.AliensState.RelativePositions.Count == 0);
+
+            if (createNewAliens)
+            {
+                newAliensState = CreateNewAliensState(worldState.GameConfigState.Width, worldState.GameConfigState.Height,
+                    worldState.GameConfigState.AliensWidth, worldState.GameConfigState.AliensHeight);
+                newAliensMovementState = new AliensMovementState(AliensMovementState.MovementDirection.Right);
+                newAliensFiringInput = new AliensFiringInput(false, 0);
+            }
+            else
+                TickAliens(worldState.GameConfigState, worldState.AliensState, worldState.AliensMovementState, out newAliensState, out newAliensMovementState, out newAliensFiringInput);
 
             RocketsState newRocketsState = TickRockets(worldState.GameConfigState, worldState.RocketsState, worldState.PlayerState, playerInput);
 
