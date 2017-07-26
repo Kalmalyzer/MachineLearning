@@ -68,10 +68,17 @@ namespace SpaceInvaders.Interactive
             Console.WriteLine("+" + new String('-', view.GetLength(0)) + "+");
         }
 
+        private static void PrintGameProgress(GameProgressState gameProgressState)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Score: " + gameProgressState.Score.ToString() + "\tLives: " + gameProgressState.Lives.ToString());
+        }
+
         public static void PrintWorld(WorldState worldState)
         {
             char[,] view = GenerateView(worldState);
             PrintView(view);
+            PrintGameProgress(worldState.GameProgressState);
         }
     }
 }

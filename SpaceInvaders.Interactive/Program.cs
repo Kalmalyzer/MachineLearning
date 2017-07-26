@@ -12,8 +12,9 @@ namespace SpaceInvaders.Interactive
             int width = 40;
             int height = 20;
             int maxRockets = 3;
+            int initialLives = 3;
 
-            WorldState worldState = Simulate.CreateNewWorldState(width, height, maxRockets, width / 2, height / 4);
+            WorldState worldState = Simulate.CreateNewWorldState(width, height, maxRockets, width / 2, height / 4, initialLives);
 
             while (true)
             {

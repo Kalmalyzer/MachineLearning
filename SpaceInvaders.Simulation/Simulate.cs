@@ -21,14 +21,15 @@ namespace SpaceInvaders.Simulation
             return aliensState;
         }
 
-        public static WorldState CreateNewWorldState(int width, int height, int maxRockets, int aliensWidth, int aliensHeight)
+        public static WorldState CreateNewWorldState(int width, int height, int maxRockets, int aliensWidth, int aliensHeight, int initialLives)
         {
             PlayerState playerState = new PlayerState(width / 2);
             AliensState aliensState = CreateNewAliensState(width, height, aliensWidth, aliensHeight);
             AliensMovementState aliensMovementState = new AliensMovementState(AliensMovementState.MovementDirection.Right);
             RocketsState rocketsState = new RocketsState(new List<Vector2i>());
             BombsState bombsState = new BombsState(new List<Vector2i>());
-            WorldState worldState = new WorldState(width, height, maxRockets, playerState, aliensState, aliensMovementState, rocketsState, bombsState);
+            GameProgressState gameProgressState = new GameProgressState(0, initialLives);
+            WorldState worldState = new WorldState(width, height, maxRockets, playerState, aliensState, aliensMovementState, rocketsState, bombsState, gameProgressState);
             return worldState;
         }
 
@@ -147,6 +148,18 @@ namespace SpaceInvaders.Simulation
             return collisions;
         }
 
+        private static List<int> FindPlayerBombCollisions(WorldState worldState, BombsState bombsState, PlayerState playerState)
+        {
+            Vector2i playerPosition = new Vector2i(playerState.Position, worldState.Height - 1);
+
+            List<int> collisions = bombsState.Positions.Select((position, index) => new Tuple<Vector2i, int>(position, index))
+                .Where(positionAndIndex => playerPosition == positionAndIndex.Item1)
+                .Select(positionAndIndex => positionAndIndex.Item2)
+                .ToList();
+
+            return collisions;
+        }
+
         private static AliensState ResolveAlienCollisions(AliensState aliensState, List<Tuple<int, int>> alienRocketCollisions)
         {
             if (alienRocketCollisions.Count != 0)
@@ -169,6 +182,11 @@ namespace SpaceInvaders.Simulation
                 return rocketsState;
         }
 
+        public static GameProgressState TickGameProgress(GameProgressState gameProgressState, int aliensKilled, bool playerKilled)
+        {
+            return new GameProgressState(gameProgressState.Score + aliensKilled, gameProgressState.Lives - (playerKilled ? 1 : 0));
+        }
+
         public static WorldState Tick(WorldState worldState, PlayerInput playerInput)
         {
             PlayerState newPlayerState = TickPlayer(worldState, worldState.PlayerState, playerInput);
@@ -183,11 +201,14 @@ namespace SpaceInvaders.Simulation
             BombsState newBombsState = TickBombs(worldState, worldState.BombsState, worldState.PlayerState, worldState.AliensState, newAliensFiringInput);
 
             List<Tuple<int, int>> alienRocketCollisions = FindAlienRocketCollisions(newAliensState, newRocketsState);
+            List<int> playerBombCollisions = FindPlayerBombCollisions(worldState, newBombsState, newPlayerState);
 
             AliensState newAliensState2 = ResolveAlienCollisions(newAliensState, alienRocketCollisions);
             RocketsState newRocketsState2 = ResolveRocketCollisions(newRocketsState, alienRocketCollisions);
 
-            return new WorldState(worldState.Width, worldState.Height, worldState.MaxRockets, newPlayerState, newAliensState2, newAliensMovementState, newRocketsState2, newBombsState);
+            GameProgressState newGameProgressState = TickGameProgress(worldState.GameProgressState, alienRocketCollisions.Count, playerBombCollisions.Count != 0);
+
+            return new WorldState(worldState.Width, worldState.Height, worldState.MaxRockets, newPlayerState, newAliensState2, newAliensMovementState, newRocketsState2, newBombsState, newGameProgressState);
         }
     }
 }
