@@ -8,16 +8,13 @@ namespace SpaceInvaders.Simulation
     {
         public readonly int Score;
         public readonly int Lives;
+        public readonly bool GameOver;
 
-        public GameProgressState(int score, int lives)
+        public GameProgressState(int score, int lives, bool gameOver)
         {
             Score = score;
             Lives = lives;
-        }
-
-        public bool IsGameOver()
-        {
-            return Lives <= 0;
+            GameOver = gameOver;
         }
     }
 }

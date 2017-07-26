@@ -28,7 +28,7 @@ namespace SpaceInvaders.Simulation
             AliensMovementState aliensMovementState = new AliensMovementState(AliensMovementState.MovementDirection.Right);
             RocketsState rocketsState = new RocketsState(new List<Vector2i>());
             BombsState bombsState = new BombsState(new List<Vector2i>());
-            GameProgressState gameProgressState = new GameProgressState(0, initialLives);
+            GameProgressState gameProgressState = new GameProgressState(0, initialLives, false);
             WorldState worldState = new WorldState(width, height, maxRockets, playerState, aliensState, aliensMovementState, rocketsState, bombsState, gameProgressState);
             return worldState;
         }
@@ -182,9 +182,16 @@ namespace SpaceInvaders.Simulation
                 return rocketsState;
         }
 
-        public static GameProgressState TickGameProgress(GameProgressState gameProgressState, int aliensKilled, bool playerKilled)
+        public static GameProgressState TickGameProgress(WorldState worldState, GameProgressState gameProgressState, AliensState aliensState, int aliensKilled, bool playerCollidedWithBomb)
         {
-            return new GameProgressState(gameProgressState.Score + aliensKilled, gameProgressState.Lives - (playerKilled ? 1 : 0));
+            Vector2i topLeft, bottomRight;
+            aliensState.GetAbsoluteBoundingBox(out topLeft, out bottomRight);
+
+            int newScore = gameProgressState.Score + aliensKilled;
+            int newLives = Math.Max(gameProgressState.Lives - (playerCollidedWithBomb ? 1 : 0), 0);
+            bool newGameOver = gameProgressState.GameOver || (newLives == 0 || (bottomRight.Y >= worldState.Height));
+
+            return new GameProgressState(newScore, newLives, newGameOver);
         }
 
         public static WorldState Tick(WorldState worldState, PlayerInput playerInput)
@@ -206,7 +213,7 @@ namespace SpaceInvaders.Simulation
             AliensState newAliensState2 = ResolveAlienCollisions(newAliensState, alienRocketCollisions);
             RocketsState newRocketsState2 = ResolveRocketCollisions(newRocketsState, alienRocketCollisions);
 
-            GameProgressState newGameProgressState = TickGameProgress(worldState.GameProgressState, alienRocketCollisions.Count, playerBombCollisions.Count != 0);
+            GameProgressState newGameProgressState = TickGameProgress(worldState, worldState.GameProgressState, newAliensState2, alienRocketCollisions.Count, playerBombCollisions.Count != 0);
 
             return new WorldState(worldState.Width, worldState.Height, worldState.MaxRockets, newPlayerState, newAliensState2, newAliensMovementState, newRocketsState2, newBombsState, newGameProgressState);
         }
