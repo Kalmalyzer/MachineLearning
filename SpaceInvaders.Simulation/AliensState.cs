@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SpaceInvaders.Simulation
 {
@@ -37,6 +39,15 @@ namespace SpaceInvaders.Simulation
                 bottomRight = new Vector2i(-1, -1);
                 return false;
             }
+        }
+
+        public List<int> GetBottomRow()
+        {
+            return RelativePositions.Select((position, index) => new Tuple<Vector2i, int>(position, index))
+                .Where(positionAndIndex => !RelativePositions.Exists(position2 => (position2 != positionAndIndex.Item1)
+                    && (position2.X == positionAndIndex.Item1.X) && (position2.Y > positionAndIndex.Item1.Y)))
+                .Select(positionAndIndex => positionAndIndex.Item2)
+                .ToList();
         }
     }
 }

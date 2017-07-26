@@ -27,7 +27,8 @@ namespace SpaceInvaders.Simulation
             AliensState aliensState = CreateNewAliensState(width, height, aliensWidth, aliensHeight);
             AliensMovementState aliensMovementState = new AliensMovementState(AliensMovementState.MovementDirection.Right);
             RocketsState rocketsState = new RocketsState(new List<Vector2i>());
-            WorldState worldState = new WorldState(width, height, maxRockets, playerState, aliensState, aliensMovementState, rocketsState);
+            BombsState bombsState = new BombsState(new List<Vector2i>());
+            WorldState worldState = new WorldState(width, height, maxRockets, playerState, aliensState, aliensMovementState, rocketsState, bombsState);
             return worldState;
         }
 
@@ -52,8 +53,21 @@ namespace SpaceInvaders.Simulation
             }
         }
 
+        public static void TickAliensFiring(AliensState aliensState, out AliensFiringInput newAliensFiringInput)
+        {
+            Random r = new Random();
+
+            if (r.Next(10) == 0)
+            {
+                List<int> bottomRow = aliensState.GetBottomRow();
+                newAliensFiringInput = new AliensFiringInput(true, bottomRow[r.Next(bottomRow.Count)]);
+            }
+            else
+                newAliensFiringInput = new AliensFiringInput(false, 0);
+        }
+
         public static void TickAliens(WorldState worldState, AliensState aliensState, AliensMovementState aliensMovementState,
-            out AliensState newAliensState, out AliensMovementState newAliensMovementState)
+            out AliensState newAliensState, out AliensMovementState newAliensMovementState, out AliensFiringInput newAliensFiringInput)
         {
             Vector2i topLeft, bottomRight;
             aliensState.GetAbsoluteBoundingBox(out topLeft, out bottomRight);
@@ -71,6 +85,8 @@ namespace SpaceInvaders.Simulation
 
             newAliensState = new AliensState(aliensState.TopLeft + movementDelta, aliensState.RelativePositions);
             newAliensMovementState = new AliensMovementState(nextMovementDirection);
+
+            TickAliensFiring(aliensState, out newAliensFiringInput);
         }
 
         private static AliensMovementState.MovementDirection ChooseNewAliensMovementDirection(WorldState worldState, AliensMovementState aliensMovementState, Vector2i topLeft, Vector2i bottomRight)
@@ -106,6 +122,14 @@ namespace SpaceInvaders.Simulation
             if (playerInput == PlayerInput.Fire && newPositions.Count < worldState.MaxRockets)
                 newPositions.Add(new Vector2i(playerState.Position, worldState.Height - 1));
             return new RocketsState(newPositions);
+        }
+
+        public static BombsState TickBombs(WorldState worldState, BombsState bombsState, PlayerState playerState, AliensState aliensState, AliensFiringInput aliensFiringInput)
+        {
+            List<Vector2i> newPositions = bombsState.Positions.Select(position => position + new Vector2i(0, 1)).Where(position => position.Y < worldState.Height).ToList();
+            if (aliensFiringInput.Fire)
+                newPositions.Add(aliensState.TopLeft + aliensState.RelativePositions[aliensFiringInput.AlienIndex]);
+            return new BombsState(newPositions);
         }
 
         private static List<Tuple<int, int>> FindAlienRocketCollisions(AliensState aliensState, RocketsState rocketsState)
@@ -151,16 +175,19 @@ namespace SpaceInvaders.Simulation
 
             AliensState newAliensState;
             AliensMovementState newAliensMovementState;
-            TickAliens(worldState, worldState.AliensState, worldState.AliensMovementState, out newAliensState, out newAliensMovementState);
+            AliensFiringInput newAliensFiringInput;
+            TickAliens(worldState, worldState.AliensState, worldState.AliensMovementState, out newAliensState, out newAliensMovementState, out newAliensFiringInput);
 
             RocketsState newRocketsState = TickRockets(worldState, worldState.RocketsState, worldState.PlayerState, playerInput);
+
+            BombsState newBombsState = TickBombs(worldState, worldState.BombsState, worldState.PlayerState, worldState.AliensState, newAliensFiringInput);
 
             List<Tuple<int, int>> alienRocketCollisions = FindAlienRocketCollisions(newAliensState, newRocketsState);
 
             AliensState newAliensState2 = ResolveAlienCollisions(newAliensState, alienRocketCollisions);
             RocketsState newRocketsState2 = ResolveRocketCollisions(newRocketsState, alienRocketCollisions);
 
-            return new WorldState(worldState.Width, worldState.Height, worldState.MaxRockets, newPlayerState, newAliensState2, newAliensMovementState, newRocketsState2);
+            return new WorldState(worldState.Width, worldState.Height, worldState.MaxRockets, newPlayerState, newAliensState2, newAliensMovementState, newRocketsState2, newBombsState);
         }
     }
 }

@@ -14,9 +14,10 @@ namespace SpaceInvaders.Simulation
         public readonly AliensState AliensState;
         public readonly AliensMovementState AliensMovementState;
         public readonly RocketsState RocketsState;
+        public readonly BombsState BombsState;
 
         public WorldState(int width, int height, int maxRockets, PlayerState playerState, AliensState aliensState, AliensMovementState aliensMovementState,
-            RocketsState rocketsState)
+            RocketsState rocketsState, BombsState bombsState)
         {
             Width = width;
             Height = height;
@@ -29,6 +30,8 @@ namespace SpaceInvaders.Simulation
             AliensMovementState = aliensMovementState;
 
             RocketsState = rocketsState;
+
+            BombsState = bombsState;
         }
     }
 }

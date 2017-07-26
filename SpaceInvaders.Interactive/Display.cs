@@ -34,6 +34,12 @@ namespace SpaceInvaders.Interactive
                 view[rocketPosition.X, rocketPosition.Y] = 'R';
         }
 
+        private static void DrawBombs(BombsState bombsState, char[,] view)
+        {
+            foreach (Vector2i bombPosition in bombsState.Positions)
+                view[bombPosition.X, bombPosition.Y] = 'B';
+        }
+
         private static char[,] GenerateView(WorldState worldState)
         {
             char[,] view = new char[worldState.Width, worldState.Height];
@@ -41,6 +47,7 @@ namespace SpaceInvaders.Interactive
             ClearView(view);
             DrawPlayer(worldState, worldState.PlayerState, view);
             DrawRockets(worldState.RocketsState, view);
+            DrawBombs(worldState.BombsState, view);
             DrawAliens(worldState, worldState.AliensState, view);
 
             return view;
