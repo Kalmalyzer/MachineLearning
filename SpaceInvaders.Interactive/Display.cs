@@ -14,14 +14,14 @@ namespace SpaceInvaders.Interactive
                     view[x, y] = ' ';
         }
 
-        private static void DrawPlayer(WorldState worldState, PlayerState playerState, char[,] view)
+        private static void DrawPlayer(GameConfigState gameConfigState, PlayerState playerState, char[,] view)
         {
             int playerX = playerState.Position;
-            int playerY = worldState.Height - 1;
+            int playerY = gameConfigState.Height - 1;
             view[playerX, playerY] = 'P';
         }
 
-        private static void DrawAliens(WorldState worldState, AliensState aliensState, char[,] view)
+        private static void DrawAliens(AliensState aliensState, char[,] view)
         {
             IEnumerable<Vector2i> positions = aliensState.RelativePositions.Select(relativePosition => relativePosition + aliensState.TopLeft);
             foreach (Vector2i alienPosition in positions)
@@ -42,13 +42,13 @@ namespace SpaceInvaders.Interactive
 
         private static char[,] GenerateView(WorldState worldState)
         {
-            char[,] view = new char[worldState.Width, worldState.Height];
+            char[,] view = new char[worldState.GameConfigState.Width, worldState.GameConfigState.Height];
 
             ClearView(view);
-            DrawPlayer(worldState, worldState.PlayerState, view);
+            DrawPlayer(worldState.GameConfigState, worldState.PlayerState, view);
             DrawRockets(worldState.RocketsState, view);
             DrawBombs(worldState.BombsState, view);
-            DrawAliens(worldState, worldState.AliensState, view);
+            DrawAliens(worldState.AliensState, view);
 
             return view;
         }
