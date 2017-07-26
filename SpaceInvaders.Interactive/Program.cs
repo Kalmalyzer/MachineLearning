@@ -16,7 +16,7 @@ namespace SpaceInvaders.Interactive
 
             WorldState worldState = Simulate.CreateNewWorldState(width, height, maxRockets, width / 2, height / 4, initialLives);
 
-            while (true)
+            while (!worldState.GameProgressState.IsGameOver())
             {
                 Simulate.PlayerInput playerInput = KeyboardInput.ReadPlayerInput();
                 Display.PrintWorld(worldState);

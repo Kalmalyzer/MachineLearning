@@ -14,5 +14,10 @@ namespace SpaceInvaders.Simulation
             Score = score;
             Lives = lives;
         }
+
+        public bool IsGameOver()
+        {
+            return Lives <= 0;
+        }
     }
 }
