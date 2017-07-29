@@ -14,6 +14,8 @@ namespace TicTacToe.Interactive
                 PlayerInput playerInput = KeyboardInput.GetPlayerInput(gameState);
                 gameState = Simulate.Tick(gameState, playerInput);
             }
+
+            Display.PrintGame(gameState);
         }
     }
 }
