@@ -8,9 +8,9 @@ namespace TicTacToe.Simulation
     {
         public readonly BoardState BoardState;
         public readonly BoardState.Player NextPlayer;
-        public readonly BoardState.Player Winner;
+        public readonly BoardState.Winner Winner;
 
-        public GameState(BoardState boardState, BoardState.Player nextPlayer, BoardState.Player winner)
+        public GameState(BoardState boardState, BoardState.Player nextPlayer, BoardState.Winner winner)
         {
             BoardState = boardState;
             NextPlayer = nextPlayer;

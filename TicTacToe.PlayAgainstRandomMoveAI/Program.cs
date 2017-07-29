@@ -14,7 +14,7 @@ namespace TicTacToe.PlayAgainstRandomMoveAI
             int randomSeed = (int) ((DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
             RandomMoveAI ai = new RandomMoveAI(randomSeed);
 
-            while (gameState.Winner == BoardState.Player.None)
+            while (gameState.Winner == BoardState.Winner.None)
             {
                 Display.PrintGame(gameState);
 

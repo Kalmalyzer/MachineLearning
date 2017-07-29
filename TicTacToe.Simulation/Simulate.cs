@@ -8,7 +8,7 @@ namespace TicTacToe.Simulation
     {
         public static GameState CreateNewGameState()
         {
-            return new GameState(BoardState.EmptyBoardState(), BoardState.Player.Player1, BoardState.Player.None);
+            return new GameState(BoardState.EmptyBoardState(), BoardState.Player.Player1, BoardState.Winner.None);
         }
 
         private static BoardState.Player NextPlayer(BoardState.Player player)
@@ -30,7 +30,7 @@ namespace TicTacToe.Simulation
                 throw new ArgumentException("Attempted to move out-of-turn");
             BoardState newBoardState = BoardState.MakeMove(gameState.BoardState, playerInput.Player, playerInput.X, playerInput.Y);
             BoardState.Player newNextPlayer = NextPlayer(gameState.NextPlayer);
-            BoardState.Player newWinner = BoardState.CheckForWinner(newBoardState);
+            BoardState.Winner newWinner = BoardState.CheckForWinner(newBoardState);
 
             GameState newGameState = new GameState(newBoardState, newNextPlayer, newWinner);
             return newGameState;

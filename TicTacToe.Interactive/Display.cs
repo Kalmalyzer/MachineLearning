@@ -30,7 +30,7 @@ namespace TicTacToe.Interactive
 
         private static void PrintPlayerInfo(GameState gameState)
         {
-            if (gameState.Winner != BoardState.Player.None)
+            if (gameState.Winner != BoardState.Winner.None)
                 Console.WriteLine("Winner: " + gameState.Winner.ToString());
             else
                 Console.WriteLine("Next player: " + gameState.NextPlayer.ToString());

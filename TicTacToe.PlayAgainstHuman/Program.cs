@@ -9,7 +9,7 @@ namespace TicTacToe.PlayAgainstHuman
         {
             GameState gameState = Simulate.CreateNewGameState();
 
-            while (gameState.Winner == BoardState.Player.None)
+            while (gameState.Winner == BoardState.Winner.None)
             {
                 Display.PrintGame(gameState);
                 PlayerInput playerInput = KeyboardInput.GetPlayerInput(gameState);
