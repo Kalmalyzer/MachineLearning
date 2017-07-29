@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.PlayAgainstRandom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.Interactive", "TicTacToe.Interactive\TicTacToe.Interactive.csproj", "{F6D1B759-6F65-48F2-868A-6248AAD74044}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.PlayAIs", "TicTacToe.PlayAIs\TicTacToe.PlayAIs.csproj", "{9677A74A-DBCC-4E3E-A49D-F0D044D3864C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{F6D1B759-6F65-48F2-868A-6248AAD74044}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6D1B759-6F65-48F2-868A-6248AAD74044}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6D1B759-6F65-48F2-868A-6248AAD74044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9677A74A-DBCC-4E3E-A49D-F0D044D3864C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9677A74A-DBCC-4E3E-A49D-F0D044D3864C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9677A74A-DBCC-4E3E-A49D-F0D044D3864C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9677A74A-DBCC-4E3E-A49D-F0D044D3864C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

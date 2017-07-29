@@ -42,5 +42,13 @@ namespace TicTacToe.Interactive
             PrintBoard(gameState.BoardState);
             PrintPlayerInfo(gameState);
         }
+
+        public static void PrintWinnerStats(Simulate.WinnerStats winnerStats)
+        {
+            int total = winnerStats.Player1Wins + winnerStats.Player2Wins + winnerStats.Draws;
+            Console.WriteLine("Player 1 wins: " + winnerStats.Player1Wins.ToString() + " (" + (winnerStats.Player1Wins * 100 / total).ToString() + "%)");
+            Console.WriteLine("Player 2 wins: " + winnerStats.Player2Wins.ToString() + " (" + (winnerStats.Player2Wins * 100 / total).ToString() + "%)");
+            Console.WriteLine("Draws: " + winnerStats.Draws.ToString() + " (" + (winnerStats.Draws * 100 / total).ToString() + "%)");
+        }
     }
 }
