@@ -6,6 +6,11 @@ namespace TicTacToe.Simulation
 {
     public class Simulate
     {
+        public static GameState CreateNewGameState()
+        {
+            return new GameState(BoardState.EmptyBoardState(), BoardState.Player.Player1, BoardState.Player.None);
+        }
+
         private static BoardState.Player NextPlayer(BoardState.Player player)
         {
             switch (player)
@@ -19,7 +24,7 @@ namespace TicTacToe.Simulation
             }
         }
 
-        public GameState Tick(GameState gameState, PlayerInput playerInput)
+        public static GameState Tick(GameState gameState, PlayerInput playerInput)
         {
             if (playerInput.Player != gameState.NextPlayer)
                 throw new ArgumentException("Attempted to move out-of-turn");
