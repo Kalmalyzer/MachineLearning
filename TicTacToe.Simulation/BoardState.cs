@@ -80,7 +80,7 @@ namespace TicTacToe.Simulation
         private static Player CheckForWinnerDiagonal(BoardState boardState, Player player, int x0, int y0, int dx, int dy, int length)
         {
             for (int i = 0; i < length; i++)
-                if (boardState.Positions[x0 + dx * length, y0 + dy * length] != player)
+                if (boardState.Positions[x0 + dx * i, y0 + dy * i] != player)
                     return Player.None;
             return player;
         }
