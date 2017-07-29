@@ -1,6 +1,7 @@
-﻿using TicTacToe.Simulation;
+﻿using TicTacToe.Interactive;
+using TicTacToe.Simulation;
 
-namespace TicTacToe.Interactive
+namespace TicTacToe.PlayAgainstHuman
 {
     class Program
     {

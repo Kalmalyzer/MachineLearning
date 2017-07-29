@@ -7,9 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceInvaders.Interactive",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceInvaders.Simulation", "SpaceInvaders.Simulation\SpaceInvaders.Simulation.csproj", "{E0B7608C-6A24-46A7-91FD-F9B2CA08BEE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.Simulation", "TicTacToe.Simulation\TicTacToe.Simulation.csproj", "{D48BE86A-762D-493C-8ED7-E894836A1E15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe.Simulation", "TicTacToe.Simulation\TicTacToe.Simulation.csproj", "{D48BE86A-762D-493C-8ED7-E894836A1E15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.Interactive", "TicTacToe.Interactive\TicTacToe.Interactive.csproj", "{7B39D59C-F126-49EB-AC16-B9B36C24AF3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.PlayAgainstHuman", "TicTacToe.PlayAgainstHuman\TicTacToe.PlayAgainstHuman.csproj", "{7B39D59C-F126-49EB-AC16-B9B36C24AF3C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe.AI", "TicTacToe.AI\TicTacToe.AI.csproj", "{2298857F-68DC-4F72-BA0A-14886186E254}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.PlayAgainstRandomMoveAI", "TicTacToe.PlayAgainstRandomMoveAI\TicTacToe.PlayAgainstRandomMoveAI.csproj", "{3D7CA2FC-EBD8-4E5C-BF60-D2DE4805EB9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.Interactive", "TicTacToe.Interactive\TicTacToe.Interactive.csproj", "{F6D1B759-6F65-48F2-868A-6248AAD74044}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +39,18 @@ Global
 		{7B39D59C-F126-49EB-AC16-B9B36C24AF3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B39D59C-F126-49EB-AC16-B9B36C24AF3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B39D59C-F126-49EB-AC16-B9B36C24AF3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2298857F-68DC-4F72-BA0A-14886186E254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2298857F-68DC-4F72-BA0A-14886186E254}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2298857F-68DC-4F72-BA0A-14886186E254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2298857F-68DC-4F72-BA0A-14886186E254}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D7CA2FC-EBD8-4E5C-BF60-D2DE4805EB9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D7CA2FC-EBD8-4E5C-BF60-D2DE4805EB9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D7CA2FC-EBD8-4E5C-BF60-D2DE4805EB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D7CA2FC-EBD8-4E5C-BF60-D2DE4805EB9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6D1B759-6F65-48F2-868A-6248AAD74044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6D1B759-6F65-48F2-868A-6248AAD74044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6D1B759-6F65-48F2-868A-6248AAD74044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6D1B759-6F65-48F2-868A-6248AAD74044}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

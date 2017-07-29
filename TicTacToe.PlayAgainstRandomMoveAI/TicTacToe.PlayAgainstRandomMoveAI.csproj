@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F6D1B759-6F65-48F2-868A-6248AAD74044}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TicTacToe.Interactive</RootNamespace>
-    <AssemblyName>TicTacToe.Interactive</AssemblyName>
+    <ProjectGuid>{3D7CA2FC-EBD8-4E5C-BF60-D2DE4805EB9C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TicTacToe.PlayAgainstRandomMoveAI</RootNamespace>
+    <AssemblyName>TicTacToe.PlayAgainstRandomMoveAI</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,11 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Display.cs" />
-    <Compile Include="KeyboardInput.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TicTacToe.AI\TicTacToe.AI.csproj">
+      <Project>{2298857f-68dc-4f72-ba0a-14886186e254}</Project>
+      <Name>TicTacToe.AI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TicTacToe.Interactive\TicTacToe.Interactive.csproj">
+      <Project>{f6d1b759-6f65-48f2-868a-6248aad74044}</Project>
+      <Name>TicTacToe.Interactive</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TicTacToe.Simulation\TicTacToe.Simulation.csproj">
       <Project>{d48be86a-762d-493c-8ed7-e894836a1e15}</Project>
       <Name>TicTacToe.Simulation</Name>
